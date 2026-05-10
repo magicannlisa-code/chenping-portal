@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>誠萍生活家具 — 內部工具</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    line-height: 1.5;
+  }
+
+  /* ===== NAV BAR ===== */
+  .navbar {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: #fff;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .navbar .brand {
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .navbar .brand span { opacity: .7; font-weight: 400; font-size: 14px; margin-left: 8px; }
+  .nav-back {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .nav-back:hover { background: rgba(255,255,255,.25); }
+  .nav-back.show { display: flex; }
+
+  /* ===== HOME PAGE ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .home-header {
+    text-align: center;
+    padding: 40px 20px 20px;
+  }
+  .home-header h2 {
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 6px;
+  }
+  .home-header p { color: #777; font-size: 14px; }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  .tool-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    cursor: pointer;
+    transition: all .2s;
+    border: 2px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.1);
+    border-color: #3498db;
+  }
+  .tool-card:active { transform: scale(.97); }
+  .tool-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+  .tool-card h3 { font-size: 17px; color: #2c3e50; margin-bottom: 6px; }
+  .tool-card p { font-size: 13px; color: #888; line-height: 1.5; }
+  .tool-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-internal { background: #e8f5e9; color: #2e7d32; }
+  .badge-external { background: #e3f2fd; color: #1565c0; }
+
+  .icon-warehouse { background: #fff3e0; }
+  .icon-stopmotion { background: #fce4ec; }
+  .icon-logo { background: #e8eaf6; }
+  .icon-video { background: #e0f7fa; }
+  .icon-curtain { background: #f3e5f5; }
+
+  /* ===== WAREHOUSE PAGE ===== */
+  .warehouse-header {
+    background: #fff;
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .search-box {
+    display: flex;
+    gap: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .search-box input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border .2s;
+  }
+  .search-box input:focus { border-color: #3498db; }
+  .search-box input::placeholder { color: #bbb; }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    padding: 12px 16px 0;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #3498db;
+    background: #fff;
+    color: #3498db;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .tab.active, .tab:hover { background: #3498db; color: #fff; }
+  .tab .count {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 0 5px;
+    font-size: 11px;
+    margin-left: 3px;
+  }
+  .stats-bar {
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #666;
+  }
+  .stats-bar span { font-weight: 600; color: #2c3e50; }
+  .wh-container { max-width: 800px; margin: 0 auto; padding: 4px 12px 80px; }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card.ng { border-left: 4px solid #e74c3c; }
+  .card.has-note { border-left: 4px solid #f39c12; }
+  .item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .ic-glass { background: #dff0fe; }
+  .ic-wood { background: #fef3e0; }
+  .ic-curtain { background: #f3e5f5; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-title { font-size: 15px; font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
+  .item-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag-qty { background: #e8f5e9; color: #2e7d32; }
+  .tag-color { background: #fff3e0; color: #e65100; }
+  .tag-note { background: #fff8e1; color: #f57f17; }
+  .tag-ng { background: #ffebee; color: #c62828; }
+  .tag-location { background: #e3f2fd; color: #1565c0; }
+  .item-num { font-size: 12px; color: #aaa; font-weight: 500; flex-shrink: 0; }
+  .section-header {
+    font-size: 13px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: 1px;
+    padding: 14px 4px 6px;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+  @media (max-width: 480px) {
+    .navbar .brand { font-size: 17px; }
+    .navbar .brand span { display: none; }
+    .home-header h2 { font-size: 22px; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .tool-card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="brand" onclick="showPage('home')">誠萍生活家具<span>內部工具平台</span></div>
+  <button class="nav-back" id="btnBack" onclick="showPage('home')">← 返回首頁</button>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="home-header">
+    <h2>內部工具</h2>
+    <p>點擊下方卡片開啟對應功能</p>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card" onclick="showPage('warehouse')">
+      <div class="tool-icon icon-warehouse">📦</div>
+      <h3>倉庫零件查詢</h3>
+      <p>查詢倉庫現有玻璃、木板、窗簾配件的尺寸與數量，支援搜尋與分類篩選</p>
+      <span class="tool-badge badge-internal">內建功能</span>
+    </div>
+    <a class="tool-card" href="https://magicannlisa-code.github.io/stopmotion-maker/" target="_blank">
+      <div class="tool-icon icon-stopmotion">🎬</div>
+      <h3>定格動畫製作器</h3>
+      <p>將產品照片製作成定格動畫影片，支援色彩調校與光影增強</p>
+      <span class="tool-badge badge-external">開新分頁</span>
+    </a>
+    <a class="tool-card" href="https://magicannlisa-code.github.io/shimoyama-logo-remover/" target="_blank">
+      <div class="tool-icon icon-logo">🧹</div>
+      <h3>霜山去 Logo 工具</h3>
+      <p>批次去除霜山產品圖片上的 Logo 浮水印</p>
+      <span class="tool-badge badge-external">開新分頁</span>
+    </a>
+    <a class="tool-card" href="https://magicannlisa-code.github.io/product-video-maker/" target="_blank">
+      <div class="tool-icon icon-video">🎞️</div>
+      <h3>產品影片生成器</h3>
+      <p>將產品圖片自動生成 Ken Burns 鏡頭動作影片</p>
+      <span class="tool-badge badge-external">開新分頁</span>
+    </a>
+    <a class="tool-card" href="https://chenping-curtain.netlify.app/" target="_blank">
+      <div class="tool-icon icon-curtain">🪟</div>
+      <h3>窗簾計算器</h3>
+      <p>計算窗簾用量與報價</p>
+      <span class="tool-badge badge-external">開新分頁</span>
+    </a>
+  </div>
+</div>
+
+<!-- WAREHOUSE PAGE -->
+<div class="page" id="page-warehouse">
+  <div class="warehouse-header">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜尋尺寸、品名、備註…" autocomplete="off">
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-cat="all">全部 <span class="count" id="cAll"></span></div>
+    <div class="tab" data-cat="glass">🔹 玻璃 <span class="count" id="cGlass"></span></div>
+    <div class="tab" data-cat="wood">🔸 木板 <span class="count" id="cWood"></span></div>
+    <div class="tab" data-cat="curtain">🔮 窗簾 <span class="count" id="cCurtain"></span></div>
+  </div>
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="wh-container" id="whList"></div>
+</div>
+
+<script>
+/* ===== PAGE NAVIGATION ===== */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('btnBack').classList.toggle('show', id !== 'home');
+  if (id === 'warehouse') {
+    document.getElementById('searchInput').focus();
+    renderWarehouse();
+  }
+}
+
+/* ===== WAREHOUSE DATA ===== */
+const DATA = [
+  {cat:"glass",no:"001",spec:"90cm 圓形",detail:"8mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"002",spec:"116cm 圓形",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"003",spec:"35.5×33cm",detail:"8mm",qty:"2",note:"",color:""},
+  {cat:"glass",no:"004",spec:"166×49cm",detail:"5mm",qty:"1",note:"3邊曲線餐櫃在礁溪",color:""},
+  {cat:"glass",no:"005",spec:"46×41cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"006",spec:"57.5×33.5cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"007",spec:"49×37cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"008",spec:"56×48cm",detail:"5mm",qty:"2",note:"",color:""},
+  {cat:"glass",no:"009",spec:"58×58cm",detail:"5mm",qty:"1",note:"4邊曲線",color:""},
+  {cat:"glass",no:"010",spec:"65.4×68.5cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"011",spec:"65.5×65.5cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"012",spec:"79.5×40cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"013",spec:"150×50cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"014",spec:"26×70cm",detail:"8mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"015",spec:"107×47.5cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"016",spec:"119×44.1cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"017",spec:"110×65cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"018",spec:"135×30cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"019",spec:"157×39cm",detail:"5mm",qty:"1",note:"GC32微損缺角",color:""},
+  {cat:"glass",no:"020",spec:"65×65cm",detail:"5mm",qty:"2",note:"",color:""},
+  {cat:"glass",no:"021",spec:"125.5×65cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"022",spec:"91.5×40.5cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"023",spec:"48×35.5cm",detail:"5mm",qty:"8",note:"另3片在礁溪",color:""},
+  {cat:"glass",no:"024",spec:"180×60cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"025",spec:"163×89cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"026",spec:"92×46cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"027",spec:"107.5×63cm",detail:"5mm",qty:"1",note:"",color:""},
+  {cat:"glass",no:"028",spec:"120×38cm",detail:"5mm",qty:"1",note:"GC35玄關櫃",color:""},
+  {cat:"glass",no:"029",spec:"166×85.5cm",detail:"5mm",qty:"1",note:"大餐桌4邊曲線",color:""},
+  {cat:"wood",no:"001",spec:"57×34cm",detail:"書櫃門板貼磁磚",qty:"3",note:"門板",color:""},
+  {cat:"wood",no:"002",spec:"81.5×36cm",detail:"",qty:"5片2組",note:"層板",color:"深棕"},
+  {cat:"wood",no:"003",spec:"78×32cm",detail:"",qty:"7",note:"鞋櫃板",color:"淺棕"},
+  {cat:"wood",no:"004",spec:"75.5×26cm",detail:"",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"005",spec:"38×30cm",detail:"",qty:"1",note:"",color:"深棕"},
+  {cat:"wood",no:"006",spec:"61×26cm",detail:"",qty:"1",note:"",color:"深棕"},
+  {cat:"wood",no:"007",spec:"61×27cm",detail:"",qty:"1",note:"",color:"深棕"},
+  {cat:"wood",no:"008",spec:"59.5×53.5cm",detail:"",qty:"3",note:"雙面櫃洞洞隔板",color:"白色"},
+  {cat:"wood",no:"009",spec:"59.5×53.5cm",detail:"",qty:"4",note:"雙面櫃洞洞隔板",color:"深棕"},
+  {cat:"wood",no:"010",spec:"76×33cm",detail:"",qty:"3",note:"",color:"白色"},
+  {cat:"wood",no:"011",spec:"119.5×30cm",detail:"",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"012",spec:"119.5×30cm",detail:"",qty:"1",note:"",color:"白色"},
+  {cat:"wood",no:"013",spec:"120×34cm",detail:"",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"014",spec:"88×39.5cm",detail:"",qty:"1",note:"",color:"原木"},
+  {cat:"wood",no:"015",spec:"80×50cm",detail:"3cm厚",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"016",spec:"81.5×29cm",detail:"",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"017",spec:"81.5×39cm",detail:"",qty:"5",note:"",color:"淺棕"},
+  {cat:"wood",no:"018",spec:"80×34cm",detail:"",qty:"3",note:"",color:"淺棕"},
+  {cat:"wood",no:"019",spec:"90×29.5cm",detail:"",qty:"1",note:"NG",color:"深棕"},
+  {cat:"wood",no:"020",spec:"94×29cm",detail:"",qty:"1",note:"NG",color:"深棕"},
+  {cat:"wood",no:"021",spec:"100×26cm",detail:"",qty:"2",note:"",color:"淺棕"},
+  {cat:"wood",no:"022",spec:"70×26cm",detail:"",qty:"1",note:"",color:"淺棕"},
+  {cat:"wood",no:"023",spec:"33×81cm",detail:"2cm厚",qty:"3",note:"",color:""},
+  {cat:"wood",no:"024",spec:"40.5×76.5cm",detail:"1.5cm厚",qty:"2",note:"",color:""},
+  {cat:"wood",no:"025",spec:"28×89cm",detail:"1.5cm厚",qty:"2",note:"",color:""},
+  {cat:"wood",no:"026",spec:"33×33cm",detail:"2cm厚",qty:"1",note:"",color:""},
+  {cat:"wood",no:"027",spec:"28×42cm",detail:"2cm厚",qty:"1",note:"",color:""},
+  {cat:"wood",no:"028",spec:"113×32cm",detail:"2cm厚",qty:"1",note:"",color:""},
+  {cat:"curtain",no:"001",spec:"275cm",detail:"窗簾滑軌",qty:"2",note:"",color:""},
+  {cat:"curtain",no:"002",spec:"125cm",detail:"窗簾滑軌",qty:"1",note:"可彎鋁軌",color:""},
+  {cat:"curtain",no:"003",spec:"195cm",detail:"窗簾滑軌",qty:"1",note:"可彎鋁軌",color:""},
+  {cat:"curtain",no:"004",spec:"154cm",detail:"窗簾滑軌",qty:"1",note:"",color:""},
+  {cat:"curtain",no:"005",spec:"153cm",detail:"窗簾滑軌",qty:"1",note:"花紋",color:""},
+  {cat:"curtain",no:"008",spec:"42.5cm",detail:"窗簾藝術桿",qty:"1",note:"鐵桿黑色(白球頭)",color:""},
+  {cat:"curtain",no:"009",spec:"137cm",detail:"窗簾藝術桿",qty:"1",note:"木桿深色(圓尖頭)",color:""},
+  {cat:"curtain",no:"010",spec:"183cm",detail:"窗簾藝術桿",qty:"1",note:"木桿深色(圓尖頭)",color:""},
+  {cat:"curtain",no:"011",spec:"135cm",detail:"窗簾藝術桿",qty:"1",note:"木桿淺色(圓尖頭)",color:""},
+  {cat:"curtain",no:"012",spec:"110cm",detail:"窗簾藝術桿",qty:"1",note:"木桿淺色(圓尖頭)",color:""},
+  {cat:"curtain",no:"013",spec:"155cm",detail:"窗簾藝術桿",qty:"1",note:"木桿淺色(無頭)",color:""},
+  {cat:"curtain",no:"014",spec:"184cm",detail:"窗簾藝術桿",qty:"1",note:"木桿深色(含木環)",color:""},
+  {cat:"curtain",no:"015",spec:"210cm",detail:"窗簾藝術桿",qty:"1",note:"木桿淺色(無頭)",color:""},
+  {cat:"curtain",no:"017",spec:"120cm寬×110cm高",detail:"百葉窗",qty:"1",note:"灰色",color:""},
+  {cat:"curtain",no:"019",spec:"133cm",detail:"伸縮桿",qty:"1",note:"使用過",color:""},
+  {cat:"curtain",no:"021",spec:"深木/淺木/白色",detail:"窗簾桿木環",qty:"各1箱",note:"",color:""},
+  {cat:"curtain",no:"022",spec:"多色",detail:"窗簾桿鐵環",qty:"各1包",note:"",color:""},
+  {cat:"curtain",no:"024",spec:"多種",detail:"窗簾滑軌夾",qty:"2箱",note:"",color:""},
+  {cat:"curtain",no:"027",spec:"各種規格",detail:"釘子",qty:"多",note:"",color:""},
+  {cat:"curtain",no:"029",spec:"各種規格",detail:"羊毛氈",qty:"多",note:"",color:""},
+];
+
+const catLabel = {glass:"玻璃", wood:"木板", curtain:"窗簾+配件"};
+const catIcon = {glass:"🔹", wood:"🔸", curtain:"🔮"};
+const catIconClass = {glass:"ic-glass", wood:"ic-wood", curtain:"ic-curtain"};
+let currentCat = "all";
+let searchText = "";
+
+function isNG(d) { return d.note && d.note.includes("NG"); }
+function hasNote(d) { return d.note && !isNG(d) && d.note.length > 0; }
+
+function highlight(text, q) {
+  if (!q) return text;
+  const i = text.toLowerCase().indexOf(q);
+  if (i < 0) return text;
+  return text.slice(0,i) + '<mark style="background:#fff176;border-radius:2px;padding:0 2px">' + text.slice(i, i+q.length) + '</mark>' + text.slice(i+q.length);
+}
+
+function renderWarehouse() {
+  const q = searchText.toLowerCase();
+  const all = q ? DATA.filter(d => [d.spec,d.detail,d.note,d.color,catLabel[d.cat]].join(" ").toLowerCase().includes(q)) : DATA;
+  document.getElementById("cAll").textContent = all.length;
+  document.getElementById("cGlass").textContent = all.filter(d=>d.cat==="glass").length;
+  document.getElementById("cWood").textContent = all.filter(d=>d.cat==="wood").length;
+  document.getElementById("cCurtain").textContent = all.filter(d=>d.cat==="curtain").length;
+
+  const filtered = all.filter(d => currentCat === "all" || d.cat === currentCat);
+  document.getElementById("statsBar").innerHTML = `顯示 <span>${filtered.length}</span> 筆，共 <span>${DATA.length}</span> 筆零件`;
+
+  const el = document.getElementById("whList");
+  if (!filtered.length) { el.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>找不到符合的零件</p></div>'; return; }
+
+  let html = "";
+  const order = currentCat === "all" ? ["glass","wood","curtain"] : [currentCat];
+  for (const cat of order) {
+    const items = filtered.filter(d => d.cat === cat);
+    if (!items.length) continue;
+    if (currentCat === "all") html += `<div class="section-header">${catIcon[cat]} ${catLabel[cat]}（${items.length}）</div>`;
+    for (const d of items) {
+      const cls = isNG(d) ? " ng" : hasNote(d) ? " has-note" : "";
+      let tags = `<span class="tag tag-qty">× ${d.qty}</span>`;
+      if (d.color) tags += `<span class="tag tag-color">${d.color}</span>`;
+      if (isNG(d)) tags += `<span class="tag tag-ng">⚠ NG</span>`;
+      else if (d.note) {
+        if (d.note.match(/礁溪|桃園|師大/)) tags += `<span class="tag tag-location">📍 ${d.note}</span>`;
+        else tags += `<span class="tag tag-note">📝 ${d.note}</span>`;
+      }
+      const title = d.detail ? `${d.spec}　${d.detail}` : d.spec;
+      html += `<div class="card${cls}"><div class="item-icon ${catIconClass[cat]}">${catIcon[cat]}</div><div class="item-info"><div class="item-title">${highlight(title,q)}</div><div class="item-tags">${tags}</div></div><div class="item-num">#${d.no}</div></div>`;
+    }
+  }
+  el.innerHTML = html;
+}
+
+document.getElementById("searchInput").addEventListener("input", e => { searchText = e.target.value.trim(); renderWarehouse(); });
+document.getElementById("tabs").addEventListener("click", e => {
+  const tab = e.target.closest(".tab");
+  if (!tab) return;
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  tab.classList.add("active");
+  currentCat = tab.dataset.cat;
+  renderWarehouse();
+});
+</script>
+</body>
+</html>
