@@ -118,6 +118,173 @@
   .icon-logo { background: #e8eaf6; }
   .icon-video { background: #e0f7fa; }
   .icon-curtain { background: #f3e5f5; }
+  .icon-storage { background: #e8f5e9; }
+
+  /* ===== STORAGE CALC PAGE ===== */
+  .calc-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px 16px 80px;
+  }
+  .calc-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .calc-section h3 {
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .calc-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .calc-row label {
+    font-size: 13px;
+    color: #666;
+    min-width: 32px;
+    text-align: right;
+  }
+  .calc-input {
+    width: 80px;
+    padding: 10px 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+    transition: border .2s;
+  }
+  .calc-input:focus { border-color: #3498db; }
+  .calc-input::placeholder { color: #ccc; font-size: 13px; }
+  .calc-unit { font-size: 13px; color: #999; }
+  .calc-x { font-size: 16px; color: #bbb; font-weight: 700; }
+  .item-row {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .item-row .item-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .item-row .item-cbm {
+    font-size: 13px;
+    color: #3498db;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .btn-remove {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+  .btn-remove:hover { background: #ffebee; }
+  .btn-add {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed #3498db;
+    border-radius: 12px;
+    background: #f0f8ff;
+    color: #3498db;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-add:hover { background: #e3f2fd; }
+  .fee-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .fee-input-row label {
+    font-size: 14px;
+    color: #555;
+    min-width: 100px;
+  }
+  .fee-input {
+    width: 100px;
+    padding: 10px 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+    transition: border .2s;
+  }
+  .fee-input:focus { border-color: #3498db; }
+  .result-box {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+  }
+  .result-box h3 { color: #fff; margin-bottom: 16px; }
+  .result-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .result-line:last-child { border-bottom: none; }
+  .result-line .val { font-weight: 700; font-size: 16px; }
+  .result-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0 0;
+    margin-top: 8px;
+    border-top: 2px solid rgba(255,255,255,.3);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .result-total .val { font-size: 26px; }
+  .result-min {
+    font-size: 12px;
+    color: rgba(255,255,255,.7);
+    margin-top: 4px;
+    text-align: right;
+  }
+  .formula-note {
+    background: #fff8e1;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #795548;
+    line-height: 1.8;
+  }
+  .formula-note code {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
 
   /* ===== WAREHOUSE PAGE ===== */
   .warehouse-header {
@@ -285,6 +452,12 @@
       <p>計算窗簾用量與報價</p>
       <span class="tool-badge badge-external">開新分頁</span>
     </a>
+    <div class="tool-card" onclick="showPage('storage')">
+      <div class="tool-icon icon-storage">🏠</div>
+      <h3>寄倉費用計算器</h3>
+      <p>輸入家具尺寸（公分），自動換算材積與每月寄倉費用</p>
+      <span class="tool-badge badge-internal">內建功能</span>
+    </div>
   </div>
 </div>
 
@@ -305,6 +478,146 @@
   <div class="wh-container" id="whList"></div>
 </div>
 
+<!-- STORAGE CALC PAGE -->
+<div class="page" id="page-storage">
+  <div class="home-header" style="padding-bottom:10px">
+    <h2>🏠 寄倉費用計算器</h2>
+    <p>輸入家具尺寸，自動計算每月寄倉費用</p>
+  </div>
+  <div class="calc-container">
+    <div class="calc-section formula-note">
+      <strong>計算公式：</strong><br>
+      材積（CBM）= <code>長 × 寬 × 高 ÷ 1,000,000</code><br>
+      月租費 = <code>總材積 × 500元/CBM + 管理手續費</code><br>
+      最低消費 <code>200 元/月</code>
+    </div>
+
+    <div class="calc-section">
+      <h3>📐 家具尺寸</h3>
+      <div id="itemList"></div>
+      <button class="btn-add" onclick="addItem()">＋ 新增一件家具</button>
+    </div>
+
+    <div class="calc-section">
+      <h3>⚙️ 費用設定</h3>
+      <div class="fee-input-row">
+        <label>單價（元/CBM）</label>
+        <input type="number" class="fee-input" id="unitPrice" value="500" oninput="calcTotal()">
+        <span class="calc-unit">元</span>
+      </div>
+      <div class="fee-input-row">
+        <label>管理手續費</label>
+        <input type="number" class="fee-input" id="mgmtFee" value="0" oninput="calcTotal()">
+        <span class="calc-unit">元</span>
+      </div>
+    </div>
+
+    <div class="calc-section result-box">
+      <h3>💰 費用明細</h3>
+      <div class="result-line">
+        <span>總材積</span>
+        <span class="val" id="rCbm">0 CBM</span>
+      </div>
+      <div class="result-line">
+        <span>寄倉費（材積 × 單價）</span>
+        <span class="val" id="rStorage">$0</span>
+      </div>
+      <div class="result-line">
+        <span>管理手續費</span>
+        <span class="val" id="rMgmt">$0</span>
+      </div>
+      <div class="result-total">
+        <span>每月租金</span>
+        <span class="val" id="rTotal">$0</span>
+      </div>
+      <div class="result-min" id="rMinNote" style="display:none">＊已套用最低消費 200 元</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== STORAGE CALCULATOR ===== */
+let storageItems = [];
+let itemCounter = 0;
+
+function addItem() {
+  itemCounter++;
+  storageItems.push({ id: itemCounter, name: '家具 ' + itemCounter, l: '', w: '', h: '', qty: 1 });
+  renderItems();
+}
+
+function removeItem(id) {
+  storageItems = storageItems.filter(i => i.id !== id);
+  renderItems();
+  calcTotal();
+}
+
+function renderItems() {
+  const el = document.getElementById('itemList');
+  if (!storageItems.length) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:#bbb;font-size:14px">點擊下方按鈕新增家具</div>';
+    return;
+  }
+  el.innerHTML = storageItems.map((item, idx) => `
+    <div class="item-row">
+      <div class="item-label">
+        <span>
+          <input type="text" value="${item.name}" placeholder="品名"
+            style="border:none;background:none;font-size:13px;font-weight:600;color:#2c3e50;width:120px;outline:none"
+            oninput="storageItems[${idx}].name=this.value">
+        </span>
+        <button class="btn-remove" onclick="removeItem(${item.id})" title="刪除">✕</button>
+      </div>
+      <div class="calc-row">
+        <label>長</label>
+        <input type="number" class="calc-input" placeholder="cm" value="${item.l}" oninput="storageItems[${idx}].l=this.value;calcTotal()">
+        <span class="calc-x">×</span>
+        <label>寬</label>
+        <input type="number" class="calc-input" placeholder="cm" value="${item.w}" oninput="storageItems[${idx}].w=this.value;calcTotal()">
+        <span class="calc-x">×</span>
+        <label>高</label>
+        <input type="number" class="calc-input" placeholder="cm" value="${item.h}" oninput="storageItems[${idx}].h=this.value;calcTotal()">
+      </div>
+      <div class="calc-row">
+        <label>數量</label>
+        <input type="number" class="calc-input" value="${item.qty}" min="1" style="width:60px" oninput="storageItems[${idx}].qty=this.value;calcTotal()">
+        <span class="calc-unit">件</span>
+        <span class="item-cbm" id="cbm-${item.id}">材積：0 CBM</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function calcTotal() {
+  let totalCbm = 0;
+  storageItems.forEach(item => {
+    const l = parseFloat(item.l) || 0;
+    const w = parseFloat(item.w) || 0;
+    const h = parseFloat(item.h) || 0;
+    const qty = parseInt(item.qty) || 1;
+    const cbm = (l * w * h) / 1000000 * qty;
+    totalCbm += cbm;
+    const el = document.getElementById('cbm-' + item.id);
+    if (el) el.textContent = '材積：' + cbm.toFixed(4) + ' CBM' + (qty > 1 ? '（' + qty + '件）' : '');
+  });
+
+  const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
+  const mgmtFee = parseFloat(document.getElementById('mgmtFee').value) || 0;
+  const storageFee = totalCbm * unitPrice;
+  let total = storageFee + mgmtFee;
+  const isMin = total > 0 && total < 200;
+  if (isMin) total = 200;
+
+  document.getElementById('rCbm').textContent = totalCbm.toFixed(4) + ' CBM';
+  document.getElementById('rStorage').textContent = '$' + Math.round(storageFee).toLocaleString();
+  document.getElementById('rMgmt').textContent = '$' + Math.round(mgmtFee).toLocaleString();
+  document.getElementById('rTotal').textContent = '$' + Math.round(total).toLocaleString();
+  document.getElementById('rMinNote').style.display = isMin ? 'block' : 'none';
+}
+
+addItem();
+</script>
+
 <script>
 /* ===== PAGE NAVIGATION ===== */
 function showPage(id) {
@@ -314,6 +627,10 @@ function showPage(id) {
   if (id === 'warehouse') {
     document.getElementById('searchInput').focus();
     renderWarehouse();
+  }
+  if (id === 'storage') {
+    renderItems();
+    calcTotal();
   }
 }
 
