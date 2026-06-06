@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家具搬運上樓檢查 — 誠萍生活家具</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif;
+    background: #F5EDE3;
+    color: #4B3A2F;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 4px;
+    color: #4B3A2F;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #8C7869;
+    margin-bottom: 20px;
+  }
+  .brand {
+    text-align: center;
+    font-size: 11px;
+    color: #BF9E7E;
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+  }
+
+  /* 區塊卡片 */
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(75,58,47,0.08);
+  }
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+  }
+  .icon-furniture { background: #BF9E7E; }
+  .icon-stair { background: #C4705A; }
+
+  /* 輸入列 */
+  .input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  .input-row label {
+    font-size: 14px;
+    min-width: 100px;
+    color: #4B3A2F;
+  }
+  .input-row input {
+    width: 72px;
+    height: 40px;
+    border: 1.5px solid #D2C5B8;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: #4B3A2F;
+    background: #FAFAF7;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-row input:focus {
+    border-color: #BF9E7E;
+    background: #fff;
+  }
+  .input-row .unit {
+    font-size: 13px;
+    color: #8C7869;
+  }
+  .input-row .x {
+    font-size: 14px;
+    color: #8C7869;
+  }
+  .input-hint {
+    font-size: 12px;
+    color: #A89888;
+    margin: -6px 0 12px 108px;
+  }
+
+  /* 編號圓圈 */
+  .num {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #C4705A;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* 檢查按鈕 */
+  .btn-check {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #C4705A, #BF9E7E);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 8px 0;
+    transition: transform 0.1s, box-shadow 0.2s;
+    letter-spacing: 2px;
+  }
+  .btn-check:active {
+    transform: scale(0.98);
+  }
+  .btn-check:disabled {
+    background: #D2C5B8;
+    cursor: not-allowed;
+  }
+
+  /* 結果 */
+  .result-card {
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 16px;
+    display: none;
+  }
+  .result-card.show { display: block; }
+  .result-pass {
+    background: #E8F5E9;
+    border: 2px solid #66BB6A;
+  }
+  .result-warn {
+    background: #FFF8E1;
+    border: 2px solid #FFA726;
+  }
+  .result-fail {
+    background: #FFEBEE;
+    border: 2px solid #EF5350;
+  }
+  .result-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .result-title {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .result-pass .result-title { color: #2E7D32; }
+  .result-warn .result-title { color: #E65100; }
+  .result-fail .result-title { color: #C62828; }
+
+  /* 檢查細項 */
+  .check-list {
+    list-style: none;
+    padding: 0;
+  }
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list .status {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-list .detail {
+    color: #666;
+    font-size: 12px;
+  }
+
+  /* 提示區 */
+  .tips {
+    background: #FFF9F0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #8C7869;
+    border: 1px dashed #D2C5B8;
+  }
+  .tips strong { color: #C4705A; }
+
+  /* 重置 */
+  .btn-reset {
+    width: 100%;
+    height: 44px;
+    border: 1.5px solid #D2C5B8;
+    border-radius: 12px;
+    background: transparent;
+    color: #8C7869;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #E8DDD2;
+    margin: 8px 0 14px;
+  }
+
+  .section-note {
+    font-size: 12px;
+    color: #A89888;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🏠 家具搬運上樓檢查</h1>
+  <p class="subtitle">輸入商品尺寸和樓梯數據，秒查能不能搬上樓</p>
+  <p class="brand">誠萍生活家具 · CHENPING HOME</p>
+
+  <!-- 家具尺寸 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-furniture">📦</span>
+      商品尺寸（包裝後）
+    </div>
+    <p class="section-note">填入家具最大件的包裝尺寸，不可拆解的填整體尺寸</p>
+    <div class="input-row">
+      <label>尺寸</label>
+      <input type="number" id="fL" placeholder="長" inputmode="decimal">
+      <span class="x">×</span>
+      <input type="number" id="fW" placeholder="寬" inputmode="decimal">
+      <span class="x">×</span>
+      <input type="number" id="fH" placeholder="高" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+  </div>
+
+  <!-- 樓梯數據 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-stair">🏗️</span>
+      樓梯丈量數據
+    </div>
+    <p class="section-note">紅色箭頭 = 量「最窄處」，都量最窄最低的地方</p>
+
+    <div class="input-row">
+      <label><span class="num">1</span> 樓梯淨寬</label>
+      <input type="number" id="s1" placeholder="" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+    <p class="input-hint">牆到牆 / 牆到扶手，最窄處</p>
+
+    <div class="input-row">
+      <label><span class="num">2</span> 上方淨高</label>
+      <input type="number" id="s2" placeholder="" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+    <p class="input-hint">踏階到斜頂最窄的一段</p>
+
+    <div class="divider"></div>
+
+    <div class="input-row">
+      <label><span class="num">3</span> 轉角平台</label>
+      <input type="number" id="s3L" placeholder="長" inputmode="decimal">
+      <span class="x">×</span>
+      <input type="number" id="s3W" placeholder="寬" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+    <p class="input-hint">⚠️ 最關鍵！長 × 最窄淨寬（扶手→牆）</p>
+
+    <div class="divider"></div>
+
+    <div class="input-row">
+      <label><span class="num">4</span> 門框尺寸</label>
+      <input type="number" id="s4W" placeholder="寬" inputmode="decimal">
+      <span class="x">×</span>
+      <input type="number" id="s4H" placeholder="高" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+    <p class="input-hint">樓上樓下都量，填最小的</p>
+
+    <div class="divider"></div>
+
+    <div class="input-row">
+      <label><span class="num">5</span> 扶手突出</label>
+      <input type="number" id="s5" placeholder="" inputmode="decimal" value="0">
+      <span class="unit">cm</span>
+    </div>
+
+    <div class="input-row">
+      <label><span class="num">6</span> 踏階深×級高</label>
+      <input type="number" id="s6D" placeholder="深" inputmode="decimal">
+      <span class="x">×</span>
+      <input type="number" id="s6H" placeholder="高" inputmode="decimal">
+      <span class="unit">cm</span>
+    </div>
+  </div>
+
+  <button class="btn-check" onclick="checkFit()">🔍 檢查能不能搬上樓</button>
+
+  <!-- 結果 -->
+  <div id="resultCard" class="result-card">
+    <div id="resultIcon" class="result-icon"></div>
+    <div id="resultTitle" class="result-title"></div>
+    <ul id="checkList" class="check-list"></ul>
+  </div>
+
+  <div class="tips" id="tipsBox" style="display:none">
+    <strong>💡 搬運建議：</strong><br>
+    <span id="tipsText"></span>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">清除重填</button>
+
+  <p class="brand" style="margin-top:24px;">誠萍生活家具 ｜ 把家，住成喜歡的樣子 🌿</p>
+</div>
+
+<script>
+function getVal(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+
+function checkFit() {
+  // 家具三邊（排序：長 > 中 > 短）
+  let dims = [getVal('fL'), getVal('fW'), getVal('fH')].sort((a, b) => b - a);
+  const [fLong, fMid, fShort] = dims;
+
+  if (fLong === 0 || fMid === 0 || fShort === 0) {
+    alert('請填入商品尺寸');
+    return;
+  }
+
+  // 樓梯數據
+  const s1 = getVal('s1');  // 樓梯淨寬
+  const s2 = getVal('s2');  // 上方淨高
+  const s3L = getVal('s3L'); // 轉角平台長
+  const s3W = getVal('s3W'); // 轉角平台寬
+  const s4W = getVal('s4W'); // 門框寬
+  const s4H = getVal('s4H'); // 門框高
+  const s5 = getVal('s5');   // 扶手突出
+  const s6D = getVal('s6D'); // 踏階深
+  const s6H = getVal('s6H'); // 踏階級高
+
+  if (s1 === 0 && s3L === 0 && s4W === 0) {
+    alert('請至少填入樓梯淨寬、轉角平台或門框尺寸');
+    return;
+  }
+
+  const checks = [];
+  let hasFailure = false;
+  let hasWarning = false;
+
+  // 有效樓梯寬度（扣掉扶手）
+  const effectiveWidth = s1 > 0 ? s1 - s5 : 0;
+
+  // ① 樓梯淨寬檢查：最短邊要能通過
+  if (s1 > 0) {
+    if (fShort <= effectiveWidth) {
+      checks.push({ pass: true, text: `樓梯淨寬 ✓`, detail: `家具最短邊 ${fShort}cm ≤ 有效寬度 ${effectiveWidth}cm` });
+    } else if (fShort <= effectiveWidth + 5) {
+      checks.push({ pass: 'warn', text: `樓梯淨寬 ⚠️ 極限`, detail: `家具最短邊 ${fShort}cm ≈ 有效寬度 ${effectiveWidth}cm，僅差 ${(fShort - effectiveWidth).toFixed(0)}cm` });
+      hasWarning = true;
+    } else {
+      checks.push({ pass: false, text: `樓梯淨寬 ✗ 不通過`, detail: `家具最短邊 ${fShort}cm > 有效寬度 ${effectiveWidth}cm，差 ${(fShort - effectiveWidth).toFixed(0)}cm` });
+      hasFailure = true;
+    }
+  }
+
+  // ② 上方淨高檢查：搬運時家具會傾斜，需要足夠的垂直空間
+  if (s2 > 0) {
+    // 在樓梯上搬運，家具最短邊朝上，中間邊沿樓梯方向
+    // 傾斜角度約 30-45 度，需要的淨高 ≈ fShort × cos(angle) + fMid × sin(angle)
+    // 簡化：需要淨高 > 家具最短邊 + 20cm 安全餘量
+    const needed = fShort + 20;
+    if (s2 >= needed) {
+      checks.push({ pass: true, text: `樓梯上方淨高 ✓`, detail: `淨高 ${s2}cm ≥ 需求 ${needed}cm（最短邊+20cm安全餘量）` });
+    } else if (s2 >= fShort) {
+      checks.push({ pass: 'warn', text: `樓梯上方淨高 ⚠️ 偏低`, detail: `淨高 ${s2}cm，搬運時需要小心傾斜角度` });
+      hasWarning = true;
+    } else {
+      checks.push({ pass: false, text: `樓梯上方淨高 ✗ 不足`, detail: `淨高 ${s2}cm < 家具最短邊 ${fShort}cm` });
+      hasFailure = true;
+    }
+  }
+
+  // ③ 轉角平台檢查（最關鍵！）
+  if (s3L > 0 && s3W > 0) {
+    // 轉角平台：家具需要在這裡轉彎
+    // 平台對角線
+    const platDiag = Math.sqrt(s3L * s3L + s3W * s3W);
+    // 家具在轉角時，需要最長邊能旋轉
+    // 考慮家具厚度的旋轉：需要的空間 = 家具長 + 家具寬（最差情況45度）
+    // 更精確：家具對角線 = √(fLong² + fMid²) 需要 ≤ 平台對角線
+    // 但也要考慮家具寬度佔用的空間
+
+    const platMin = Math.min(s3L, s3W);
+    const platMax = Math.max(s3L, s3W);
+
+    // 簡單判斷：短邊能進平台 + 長邊能轉過去
+    // 方法1：家具平放旋轉 — 需要 √(fLong² + fShort²) ≤ 平台對角線 且 fMid ≤ 平台淨高
+    const furnitureDiag = Math.sqrt(fLong * fLong + fShort * fShort);
+
+    // 方法2：家具立起來轉 — 需要 √(fLong² + fMid²) ≤ 平台對角線 且 fShort ≤ 平台最窄邊
+    const furnitureDiag2 = Math.sqrt(fLong * fLong + fMid * fMid);
+
+    // 取最有利的搬法
+    let canTurn = false;
+    let turnDetail = '';
+
+    // 搬法A：平放（長×短面朝地面）
+    if (furnitureDiag <= platDiag && fMid <= 250) {  // 250 = 天花板高度大致
+      canTurn = true;
+      turnDetail = `平放旋轉：家具對角線 ${furnitureDiag.toFixed(0)}cm ≤ 平台對角線 ${platDiag.toFixed(0)}cm`;
+    }
+    // 搬法B：立起來（長×中面朝地面）
+    if (!canTurn && fShort <= platMin) {
+      if (fLong <= platMax) {
+        canTurn = true;
+        turnDetail = `立放通過：最長邊 ${fLong}cm ≤ 平台長邊 ${platMax}cm`;
+      } else if (furnitureDiag <= platDiag) {
+        canTurn = true;
+        turnDetail = `立放斜轉：對角線 ${furnitureDiag.toFixed(0)}cm ≤ 平台對角線 ${platDiag.toFixed(0)}cm`;
+      }
+    }
+    // 搬法C：直接不轉，直通過
+    if (!canTurn && fLong <= platMax && fMid <= platMin) {
+      canTurn = true;
+      turnDetail = `直通不轉：家具 ${fLong}×${fMid}cm ≤ 平台 ${platMax}×${platMin}cm`;
+    }
+
+    if (canTurn) {
+      checks.push({ pass: true, text: `轉角平台 ✓`, detail: turnDetail });
+    } else {
+      // 差多少
+      const minNeeded = Math.min(furnitureDiag, fLong);
+      const gap = Math.max(0, minNeeded - platDiag);
+      if (gap <= 10) {
+        checks.push({ pass: 'warn', text: `轉角平台 ⚠️ 極限`, detail: `家具對角線 ${furnitureDiag.toFixed(0)}cm vs 平台對角線 ${platDiag.toFixed(0)}cm，差 ${gap.toFixed(0)}cm，需現場評估` });
+        hasWarning = true;
+      } else {
+        checks.push({ pass: false, text: `轉角平台 ✗ 轉不過`, detail: `家具對角線 ${furnitureDiag.toFixed(0)}cm > 平台對角線 ${platDiag.toFixed(0)}cm，差 ${gap.toFixed(0)}cm` });
+        hasFailure = true;
+      }
+    }
+  }
+
+  // ④ 門框檢查
+  if (s4W > 0 && s4H > 0) {
+    // 家具最小的兩邊要能通過門框
+    // 嘗試兩種方向：(短×中) 或 旋轉
+    let doorOK = false;
+    let doorDetail = '';
+
+    if (fShort <= s4W && fMid <= s4H) {
+      doorOK = true;
+      doorDetail = `正放通過：${fShort}×${fMid}cm ≤ 門框 ${s4W}×${s4H}cm`;
+    } else if (fShort <= s4H && fMid <= s4W) {
+      doorOK = true;
+      doorDetail = `轉向通過：${fMid}×${fShort}cm ≤ 門框 ${s4W}×${s4H}cm`;
+    } else if (fShort <= s4W && fShort <= s4H) {
+      // 可以斜著進
+      const doorDiag = Math.sqrt(s4W * s4W + s4H * s4H);
+      if (fMid <= doorDiag) {
+        doorOK = true;
+        doorDetail = `斜放通過：中邊 ${fMid}cm ≤ 門框對角線 ${doorDiag.toFixed(0)}cm`;
+      }
+    }
+
+    if (doorOK) {
+      checks.push({ pass: true, text: `門框尺寸 ✓`, detail: doorDetail });
+    } else {
+      checks.push({ pass: false, text: `門框尺寸 ✗ 進不去`, detail: `家具 ${fShort}×${fMid}cm 無法通過門框 ${s4W}×${s4H}cm` });
+      hasFailure = true;
+    }
+  }
+
+  // 顯示結果
+  const card = document.getElementById('resultCard');
+  const icon = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const list = document.getElementById('checkList');
+  const tipsBox = document.getElementById('tipsBox');
+  const tipsText = document.getElementById('tipsText');
+
+  card.className = 'result-card show';
+  list.innerHTML = '';
+
+  checks.forEach(c => {
+    const li = document.createElement('li');
+    let statusIcon = c.pass === true ? '✅' : c.pass === 'warn' ? '⚠️' : '❌';
+    li.innerHTML = `<span class="status">${statusIcon}</span><div><div>${c.text}</div><div class="detail">${c.detail}</div></div>`;
+    list.appendChild(li);
+  });
+
+  if (hasFailure) {
+    card.className = 'result-card show result-fail';
+    icon.textContent = '❌';
+    title.textContent = '無法搬上樓';
+    tipsBox.style.display = 'block';
+    tipsText.innerHTML = '• 建議確認是否有<strong>電梯</strong>可用<br>• 或詢問是否可<strong>拆件搬運</strong>（拆開後最大件尺寸重新檢查）<br>• 必要時考慮<strong>吊車搬運</strong>（從陽台/窗戶進入）';
+  } else if (hasWarning) {
+    card.className = 'result-card show result-warn';
+    icon.textContent = '⚠️';
+    title.textContent = '可能可以，建議現場評估';
+    tipsBox.style.display = 'block';
+    tipsText.innerHTML = '• 尺寸接近極限，建議<strong>師傅現場確認</strong><br>• 請客戶提供<strong>現場照片</strong>輔助判斷<br>• 搬運時可能需要<strong>拆除扶手</strong>或<strong>斜放</strong>通過';
+  } else {
+    card.className = 'result-card show result-pass';
+    icon.textContent = '✅';
+    title.textContent = '可以搬上樓！';
+    tipsBox.style.display = 'block';
+    tipsText.innerHTML = '• 各關卡都有餘裕，搬運沒問題<br>• 提醒客戶搬運當天<strong>清空走道雜物</strong><br>• 建議鋪好<strong>保護墊</strong>避免刮傷牆壁地板';
+  }
+
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAll() {
+  ['fL','fW','fH','s1','s2','s3L','s3W','s4W','s4H','s5','s6D','s6H'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('s5').value = '0';
+  document.getElementById('resultCard').className = 'result-card';
+  document.getElementById('tipsBox').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
